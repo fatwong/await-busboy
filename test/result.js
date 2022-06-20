@@ -1,15 +1,8 @@
 /* global it, describe */
 'use strict'
 
-const vm = require('vm')
 const assert = require('assert')
 const Result = require('../result')
-
-let inspectPromise = (p) => {
-  const Debug = vm.runInDebugContext('Debug') // eslint-disable-line
-  const mirror = Debug.MakeMirror(p, true)
-  return mirror.status()
-}
 
 describe('Result', function () {
   it('is a constructor', function (done) {
@@ -96,8 +89,6 @@ describe('Result', function () {
             }).catch(done)
 
             assert(p instanceof Promise)
-            const status = inspectPromise(p)
-            assert.strictEqual('pending', status)
 
             setTimeout(() => {
               ranInOrder = true
@@ -246,11 +237,9 @@ describe('Result', function () {
             function test2 (val) {
               assert.strictEqual('two', val)
 
-              const p3 = res.then(test3).catch(done)
+              res.then(test3).catch(done)
 
               setTimeout(() => {
-                const status = inspectPromise(p3)
-                assert.strictEqual('pending', status)
                 res.add(47)
               }, 80)
             }
