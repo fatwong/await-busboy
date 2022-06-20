@@ -17,11 +17,11 @@
     "url": "https://github.com/aheckmann/await-busboy/issues"
   },
   "engines": {
-    "node": ">= 7.6.0"
+    "node": ">= 10.16.0"
   },
   "dependencies": {
     "black-hole-stream": "0.0.1",
-    "busboy": "0.3.0"
+    "busboy": "1.6.0"
   },
   "devDependencies": {
     "co": "4.6.x",

@@ -28,7 +28,7 @@ module.exports = (request, options) => {
   const checkFile = options.checkFile
   let lastError
 
-  const busboy = new Busboy(options)
+  const busboy = Busboy(options)
 
   request.on('close', cleanup)
 
@@ -37,7 +37,7 @@ module.exports = (request, options) => {
     .on('file', onFile)
     .on('close', cleanup)
     .on('error', onEnd)
-    .on('finish', onEnd)
+    .on('close', onEnd)
 
   busboy.on('partsLimit', () => {
     const err = new Error('Reach parts limit')
@@ -69,7 +69,7 @@ module.exports = (request, options) => {
 
   return res
 
-  function onField (name, val, fieldnameTruncated, valTruncated) {
+  function onField (name, val, { nameTruncated: fieldnameTruncated, valueTruncated: valTruncated }) {
     if (checkField) {
       const err = checkField(name, val, fieldnameTruncated, valTruncated)
       if (err) {
@@ -103,7 +103,7 @@ module.exports = (request, options) => {
     }
   }
 
-  function onFile (fieldname, file, filename, encoding, mimetype) {
+  function onFile (fieldname, file, { filename, encoding, mime: mimetype }) {
     if (checkFile) {
       const err = checkFile(fieldname, file, filename, encoding, mimetype)
       if (err) {
